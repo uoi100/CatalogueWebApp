@@ -6,11 +6,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Catalogue.Controllers
 {
+
     public class UserAccount
     {
-        [ScaffoldColumn(false)]
-        private int UserID { get; set; }
-
         [Required, StringLength(128), Display(Name="Username")]
         public string Username { get; set; }
 
