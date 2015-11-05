@@ -1,0 +1,43 @@
+﻿
+<h1>@ViewBag.Title</h1>
+
+<h2>@ViewBag.Message</h2>
+
+    @{ 
+
+        if (IsPost)
+        {
+            string username = Request.Form["username"];
+            string password = Request.Form["password"];
+
+            
+            <text>
+                You entered: <br />
+                Username: @username <br />
+                Password: @password <br />
+            </text>
+
+        }
+    }
+
+<body>
+    <form method="post">
+        <fieldset>
+            <legend>Login Form</legend>
+            <div>
+                <label for="Username">Username:</label>
+                <input type="text" name="Username" value="" />
+            </div>
+            <div>
+                <label for="Password" class="label-info">Password:</label>
+                <input type="password" name="Password" value=""/>
+            </div>
+            <div>
+                <label>&nbsp;</label>
+                <input type="submit" value="Submit" class="btn" />
+                <label>&nbsp;</label>
+                <input type="button" value="Sign Up" class="btn" />
+            </div>
+        </fieldset>
+    </form>
+</body>

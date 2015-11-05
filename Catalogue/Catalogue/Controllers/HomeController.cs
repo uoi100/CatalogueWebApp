@@ -10,7 +10,13 @@ namespace Catalogue.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            if(!string.IsNullOrEmpty(Session["UserLogin"] as string)) {
+
+
+                return View();
+            }
+
+            return RedirectToAction("Index", "Login");
         }
 
         public ActionResult About()
