@@ -6,11 +6,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Catalogue.Controllers
 {
-
     public class UserAccount
     {
         [Required, StringLength(128), Display(Name="Username")]
-        public string Username { get; set; }
+        public string UserName { get; set; }
 
         [Required, StringLength(128), Display(Name = "Password"), DataType(DataType.Password)]
         public string Password { get; set; }

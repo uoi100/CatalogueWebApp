@@ -35,6 +35,16 @@ namespace Catalogue.Controllers
             {
                 // Todo: If the accountToCreate object is valid
                 // we'll need to save it in a database
+                Models.User newUser = new Models.User();
+
+                newUser.UserName = accountToCreate.UserName;
+                newUser.Password = accountToCreate.Password;
+                newUser.Email = accountToCreate.Email;
+
+                Catalogue.Models.CatalogueDBEntities userAccounts = new Models.CatalogueDBEntities();
+                userAccounts.Database.CreateIfNotExists();
+                userAccounts.Users.Add(newUser);
+                userAccounts.SaveChanges();
 
                 // After saving we'll redirect the user to homepage
                 return Redirect("/");
