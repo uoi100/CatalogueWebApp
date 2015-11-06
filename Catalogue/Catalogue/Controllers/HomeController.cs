@@ -10,7 +10,7 @@ namespace Catalogue.Controllers
     {
         public ActionResult Index()
         {
-            if(!string.IsNullOrEmpty(Session["UserLogin"] as string)) {
+            if(!string.IsNullOrEmpty(Session["Login"] as string)) {
 
 
                 return View();
