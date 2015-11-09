@@ -2,19 +2,17 @@
     ViewBag.Title = "Information Catalogue";
 }
 
-<h3>@ViewBag.Message</h3>
+<h3>Welcome @ViewBag.Username!</h3>
 
-<div class="jumbotron">
-    <h1>Information Catalogue</h1>
-    <p class="lead">a CST4D Web Application Project made by Calvin and Joel.</p>
-</div>
-
-<div class="row">
+<div class="col">
     <div class="col-md-4">
         <h2>Catalogues</h2>
-        <p><a class="btn btn-default" href="">Create Catalogue</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Your Schedule</h2>
+        @Html.ActionLink("Create Catalogue", "Create", "Catalogue")
     </div>
 </div>
+<div class="col">
+    <div class="col-lg-4">
+        <h2>Your Content Here...</h2>
+    </div>
+</div>
+<br />
