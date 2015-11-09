@@ -1,0 +1,313 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="CatalogueDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Catalogue">
+          <Key>
+            <PropertyRef Name="CataID" />
+          </Key>
+          <Property Name="CataID" Type="int" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Priority" Type="int" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="4000" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+          <Property Name="DateModified" Type="datetime" />
+        </EntityType>
+        <EntityType Name="CatalogueItem">
+          <Key>
+            <PropertyRef Name="ItemID" />
+          </Key>
+          <Property Name="ItemID" Type="int" Nullable="false" />
+          <Property Name="CataID" Type="int" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Deadline" Type="datetime" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="4000" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+          <Property Name="DateModified" Type="datetime" />
+          <Property Name="Complete" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Stats">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="SundayHrs" Type="int" />
+          <Property Name="MondayHrs" Type="int" />
+          <Property Name="TuesdayHrs" Type="int" />
+          <Property Name="WednesdayHrs" Type="int" />
+          <Property Name="ThursdayHrs" Type="int" />
+          <Property Name="FridayHrs" Type="int" />
+          <Property Name="SaturdayHrs" Type="int" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_dbo_Catalogue_dbo_User_UserID">
+          <End Role="User" Type="Self.User" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Catalogue" Type="Self.Catalogue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Catalogue">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_CatalogueItem_dbo_Catalogue_CataID">
+          <End Role="Catalogue" Type="Self.Catalogue" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="CatalogueItem" Type="Self.CatalogueItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Catalogue">
+              <PropertyRef Name="CataID" />
+            </Principal>
+            <Dependent Role="CatalogueItem">
+              <PropertyRef Name="CataID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Stats_dbo_User_UserID">
+          <End Role="User" Type="Self.User" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Stats" Type="Self.Stats" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Stats">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CatalogueDBModelStoreContainer">
+          <EntitySet Name="Catalogue" EntityType="Self.Catalogue" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CatalogueItem" EntityType="Self.CatalogueItem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Stats" EntityType="Self.Stats" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_dbo_Catalogue_dbo_User_UserID" Association="Self.FK_dbo_Catalogue_dbo_User_UserID">
+            <End Role="User" EntitySet="User" />
+            <End Role="Catalogue" EntitySet="Catalogue" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_CatalogueItem_dbo_Catalogue_CataID" Association="Self.FK_dbo_CatalogueItem_dbo_Catalogue_CataID">
+            <End Role="Catalogue" EntitySet="Catalogue" />
+            <End Role="CatalogueItem" EntitySet="CatalogueItem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Stats_dbo_User_UserID" Association="Self.FK_dbo_Stats_dbo_User_UserID">
+            <End Role="User" EntitySet="User" />
+            <End Role="Stats" EntitySet="Stats" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CatalogueDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Catalogue">
+          <Key>
+            <PropertyRef Name="CataID" />
+          </Key>
+          <Property Name="CataID" Type="Int32" Nullable="false" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Priority" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateModified" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="User" Relationship="Self.FK_dbo_Catalogue_dbo_User_UserID" FromRole="Catalogue" ToRole="User" />
+          <NavigationProperty Name="CatalogueItems" Relationship="Self.FK_dbo_CatalogueItem_dbo_Catalogue_CataID" FromRole="Catalogue" ToRole="CatalogueItem" />
+        </EntityType>
+        <EntityType Name="CatalogueItem">
+          <Key>
+            <PropertyRef Name="ItemID" />
+          </Key>
+          <Property Name="ItemID" Type="Int32" Nullable="false" />
+          <Property Name="CataID" Type="Int32" Nullable="false" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Deadline" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Description" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateModified" Type="DateTime" Precision="3" />
+          <Property Name="Complete" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Catalogue" Relationship="Self.FK_dbo_CatalogueItem_dbo_Catalogue_CataID" FromRole="CatalogueItem" ToRole="Catalogue" />
+        </EntityType>
+        <EntityType Name="Stat">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="SundayHrs" Type="Int32" />
+          <Property Name="MondayHrs" Type="Int32" />
+          <Property Name="TuesdayHrs" Type="Int32" />
+          <Property Name="WednesdayHrs" Type="Int32" />
+          <Property Name="ThursdayHrs" Type="Int32" />
+          <Property Name="FridayHrs" Type="Int32" />
+          <Property Name="SaturdayHrs" Type="Int32" />
+          <NavigationProperty Name="User" Relationship="Self.FK_dbo_Stats_dbo_User_UserID" FromRole="Stats" ToRole="User" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Catalogues" Relationship="Self.FK_dbo_Catalogue_dbo_User_UserID" FromRole="User" ToRole="Catalogue" />
+          <NavigationProperty Name="Stat" Relationship="Self.FK_dbo_Stats_dbo_User_UserID" FromRole="User" ToRole="Stats" />
+        </EntityType>
+        <Association Name="FK_dbo_Catalogue_dbo_User_UserID">
+          <End Role="User" Type="Self.User" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Catalogue" Type="Self.Catalogue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Catalogue">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_CatalogueItem_dbo_Catalogue_CataID">
+          <End Role="Catalogue" Type="Self.Catalogue" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="CatalogueItem" Type="Self.CatalogueItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Catalogue">
+              <PropertyRef Name="CataID" />
+            </Principal>
+            <Dependent Role="CatalogueItem">
+              <PropertyRef Name="CataID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Stats_dbo_User_UserID">
+          <End Role="User" Type="Self.User" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Stats" Type="Self.Stat" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Stats">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CatalogueDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Catalogues" EntityType="Self.Catalogue" />
+          <EntitySet Name="CatalogueItems" EntityType="Self.CatalogueItem" />
+          <EntitySet Name="Stats" EntityType="Self.Stat" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <AssociationSet Name="FK_dbo_Catalogue_dbo_User_UserID" Association="Self.FK_dbo_Catalogue_dbo_User_UserID">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Catalogue" EntitySet="Catalogues" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_CatalogueItem_dbo_Catalogue_CataID" Association="Self.FK_dbo_CatalogueItem_dbo_Catalogue_CataID">
+            <End Role="Catalogue" EntitySet="Catalogues" />
+            <End Role="CatalogueItem" EntitySet="CatalogueItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Stats_dbo_User_UserID" Association="Self.FK_dbo_Stats_dbo_User_UserID">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Stats" EntitySet="Stats" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CatalogueDBModelStoreContainer" CdmEntityContainer="CatalogueDBEntities">
+          <EntitySetMapping Name="Catalogues">
+            <EntityTypeMapping TypeName="CatalogueDBModel.Catalogue">
+              <MappingFragment StoreEntitySet="Catalogue">
+                <ScalarProperty Name="CataID" ColumnName="CataID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Priority" ColumnName="Priority" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CatalogueItems">
+            <EntityTypeMapping TypeName="CatalogueDBModel.CatalogueItem">
+              <MappingFragment StoreEntitySet="CatalogueItem">
+                <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+                <ScalarProperty Name="CataID" ColumnName="CataID" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Deadline" ColumnName="Deadline" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="Complete" ColumnName="Complete" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Stats">
+            <EntityTypeMapping TypeName="CatalogueDBModel.Stat">
+              <MappingFragment StoreEntitySet="Stats">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="SundayHrs" ColumnName="SundayHrs" />
+                <ScalarProperty Name="MondayHrs" ColumnName="MondayHrs" />
+                <ScalarProperty Name="TuesdayHrs" ColumnName="TuesdayHrs" />
+                <ScalarProperty Name="WednesdayHrs" ColumnName="WednesdayHrs" />
+                <ScalarProperty Name="ThursdayHrs" ColumnName="ThursdayHrs" />
+                <ScalarProperty Name="FridayHrs" ColumnName="FridayHrs" />
+                <ScalarProperty Name="SaturdayHrs" ColumnName="SaturdayHrs" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="CatalogueDBModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
