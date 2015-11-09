@@ -11,7 +11,7 @@ namespace Catalogue.Controllers
         public ActionResult Index()
         {
             if(!string.IsNullOrEmpty(Session["Login"] as string)) {
-                ViewBag.Username = Session["Login"];
+                ViewBag.Username = Session["Login"];                
 
                 return View();
             }
