@@ -21,8 +21,15 @@ namespace Catalogue.Controllers
             if (string.IsNullOrEmpty(Session["Login"] as string))
                 return RedirectToAction("Index", "Login");
 
-            var catalogues = db.Catalogues.Include(c => c.User);
-            return View(catalogues.ToList());
+            foreach (Models.User user in db.Users)
+            {
+                if (string.Compare(user.UserName, Session["Login"].ToString()) == 0)
+                {
+                    return View(user.Catalogues);
+                }
+            }
+
+            return View();
         }
 
         // GET: Catalogues/Details/5
@@ -92,6 +99,11 @@ namespace Catalogue.Controllers
             {
                 return HttpNotFound();
             }
+
+            Session["CataID"] = catalogue.CataID;
+            Session["UserID"] = catalogue.UserID;
+            Session["DateCreated"] = catalogue.DateCreated;
+
             return View(catalogue);
         }
 
@@ -107,6 +119,11 @@ namespace Catalogue.Controllers
 
             if (ModelState.IsValid)
             {
+
+                catalogue.CataID = int.Parse(Session["CataID"].ToString());
+                catalogue.UserID = int.Parse(Session["UserID"].ToString());
+                catalogue.DateCreated = DateTime.Parse(Session["DateCreated"].ToString());
+                catalogue.DateModified = DateTime.Now;
                 db.Entry(catalogue).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

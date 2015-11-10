@@ -20,8 +20,22 @@ namespace Catalogue.Controllers
             if (string.IsNullOrEmpty(Session["Login"] as string))
                 return RedirectToAction("Index", "Login");
 
-            var catalogueItems = db.CatalogueItems.Include(c => c.Catalogue);
-            return View(catalogueItems.ToList());
+            foreach (Models.User user in db.Users)
+            {
+                if (string.Compare(user.UserName, Session["Login"].ToString()) == 0)
+                {
+                    LinkedList<CatalogueItem> catalogueItems = new LinkedList<CatalogueItem>();
+                    foreach(Models.Catalogue catalogue in user.Catalogues)
+                    {
+                        foreach (Models.CatalogueItem item in catalogue.CatalogueItems)
+                            catalogueItems.AddLast(item);
+                    }
+
+                    return View(catalogueItems.ToList<CatalogueItem>());
+                }
+            }
+
+            return View();
         }
 
         // GET: CatalogueItems/Details/5
@@ -93,7 +107,10 @@ namespace Catalogue.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.CataID = new SelectList(db.Catalogues, "CataID", "Title", catalogueItem.CataID);
+
+            Session["ItemID"] = catalogueItem.ItemID;
+            Session["CataID"] = catalogueItem.CataID;
+            Session["DateCreated"] = catalogueItem.DateCreated;
             return View(catalogueItem);
         }
 
@@ -102,14 +119,19 @@ namespace Catalogue.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ItemID,CataID,Title,Deadline,Description,DateCreated,DateModified,Complete")] CatalogueItem catalogueItem)
+        public ActionResult Edit([Bind(Exclude = "ItemID,CataID,DateCreated,DateModified,Catalogue",Include = "Title,Deadline,Description,DateModified,Complete")] CatalogueItem catalogueItem)
         {
             if (string.IsNullOrEmpty(Session["Login"] as string))
                 return RedirectToAction("Index", "Login");
 
             if (ModelState.IsValid)
             {
+                catalogueItem.ItemID = int.Parse(Session["ItemID"].ToString());
+                catalogueItem.CataID = int.Parse(Session["CataID"].ToString());
+                catalogueItem.DateCreated = DateTime.Parse(Session["DateCreated"].ToString());
+                catalogueItem.DateModified = DateTime.Now;
                 db.Entry(catalogueItem).State = EntityState.Modified;
+
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
