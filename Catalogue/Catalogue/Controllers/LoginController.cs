@@ -36,6 +36,7 @@ namespace Catalogue.Controllers
                             if(string.Compare(user.Password, loginAccount.Password) == 0)
                             {
                                 Session["Login"] = user.UserName;
+                                Session["UserID"] = user.UserID;
                                 return RedirectToAction("Index", "Home");
                             }
                         }
@@ -69,15 +70,16 @@ namespace Catalogue.Controllers
                 Catalogue.Models.CatalogueDBEntities userAccounts = new Models.CatalogueDBEntities();
                 userAccounts.Database.CreateIfNotExists();
                 
-                foreach( Models.User user in userAccounts.Users)
-                {
-                    if(string.Compare(accountToCreate.UserName.ToLower(), user.UserName.ToLower()) == 0)
+                if (userAccounts.Users.Count<Models.User>() > 0)
+                    foreach( Models.User user in userAccounts.Users)
                     {
-                        ViewBag.Error = "Username already exists";
+                        if(string.Compare(accountToCreate.UserName.ToLower(), user.UserName.ToLower()) == 0)
+                        {
+                            ViewBag.Error = "Username already exists";
 
-                        return View(accountToCreate);
+                            return View(accountToCreate);
+                        }
                     }
-                }
 
                 Models.User newUser = new Models.User();
 
