@@ -8,24 +8,23 @@ using System.Web;
 using System.Web.Mvc;
 using Catalogue.Models;
 
-
 namespace Catalogue.Controllers
 {
-    public class CataloguesController : Controller
+    public class CatalogueItemsController : Controller
     {
         private CatalogueDBEntities db = new CatalogueDBEntities();
 
-        // GET: Catalogues
+        // GET: CatalogueItems
         public ActionResult Index()
         {
             if (string.IsNullOrEmpty(Session["Login"] as string))
                 return RedirectToAction("Index", "Login");
 
-            var catalogues = db.Catalogues.Include(c => c.User);
-            return View(catalogues.ToList());
+            var catalogueItems = db.CatalogueItems.Include(c => c.Catalogue);
+            return View(catalogueItems.ToList());
         }
 
-        // GET: Catalogues/Details/5
+        // GET: CatalogueItems/Details/5
         public ActionResult Details(int? id)
         {
             if (string.IsNullOrEmpty(Session["Login"] as string))
@@ -35,49 +34,51 @@ namespace Catalogue.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Models.Catalogue catalogue = db.Catalogues.Find(id);
-            if (catalogue == null)
+            CatalogueItem catalogueItem = db.CatalogueItems.Find(id);
+            if (catalogueItem == null)
             {
                 return HttpNotFound();
             }
-            return View(catalogue);
+            return View(catalogueItem);
         }
 
-        // GET: Catalogues/Create
+        // GET: CatalogueItems/Create
         public ActionResult Create()
         {
             if (string.IsNullOrEmpty(Session["Login"] as string))
                 return RedirectToAction("Index", "Login");
 
-            ViewBag.UserID = new SelectList(db.Users, "UserID", "UserName");
+            ViewBag.CataID = new SelectList(db.Catalogues, "CataID", "Title");
             return View();
         }
 
-        // POST: Catalogues/Create
+        // POST: CatalogueItems/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CataID,UserID,Title,Priority,Description,DateCreated,DateModified")] Models.Catalogue catalogue)
+        public ActionResult Create([Bind(Include = "Title,Deadline,Description,DateCreated,DateModified,Complete")] CatalogueItem catalogueItem)
         {
             if (string.IsNullOrEmpty(Session["Login"] as string))
                 return RedirectToAction("Index", "Login");
 
             if (ModelState.IsValid)
             {
-                catalogue.CataID = db.Catalogues.Count<Models.Catalogue>() + 1;
-                catalogue.UserID = int.Parse(Session["UserID"].ToString());
-                catalogue.DateCreated = DateTime.Now;
-                catalogue.DateModified = DateTime.Now;
+                catalogueItem.DateCreated = DateTime.Now;
+                catalogueItem.DateModified = DateTime.Now;
+                catalogueItem.CataID = int.Parse(Session["CataID"].ToString());
+                catalogueItem.ItemID = db.CatalogueItems.Count<Models.CatalogueItem>() + 1;
 
-                db.Catalogues.Add(catalogue);
+                db.CatalogueItems.Add(catalogueItem);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(catalogue);
+
+            ViewBag.CataID = new SelectList(db.Catalogues, "CataID", "Title", catalogueItem.CataID);
+            return View(catalogueItem);
         }
 
-        // GET: Catalogues/Edit/5
+        // GET: CatalogueItems/Edit/5
         public ActionResult Edit(int? id)
         {
             if (string.IsNullOrEmpty(Session["Login"] as string))
@@ -87,35 +88,36 @@ namespace Catalogue.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Models.Catalogue catalogue = db.Catalogues.Find(id);
-            if (catalogue == null)
+            CatalogueItem catalogueItem = db.CatalogueItems.Find(id);
+            if (catalogueItem == null)
             {
                 return HttpNotFound();
             }
-            return View(catalogue);
+            ViewBag.CataID = new SelectList(db.Catalogues, "CataID", "Title", catalogueItem.CataID);
+            return View(catalogueItem);
         }
 
-        // POST: Catalogues/Edit/5
+        // POST: CatalogueItems/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "CataID,UserID,Title,Priority,Description,DateCreated,DateModified")] Models.Catalogue catalogue)
+        public ActionResult Edit([Bind(Include = "ItemID,CataID,Title,Deadline,Description,DateCreated,DateModified,Complete")] CatalogueItem catalogueItem)
         {
             if (string.IsNullOrEmpty(Session["Login"] as string))
                 return RedirectToAction("Index", "Login");
 
             if (ModelState.IsValid)
             {
-                db.Entry(catalogue).State = EntityState.Modified;
+                db.Entry(catalogueItem).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
-            return View(catalogue);
+            ViewBag.CataID = new SelectList(db.Catalogues, "CataID", "Title", catalogueItem.CataID);
+            return View(catalogueItem);
         }
 
-        // GET: Catalogues/Delete/5
+        // GET: CatalogueItems/Delete/5
         public ActionResult Delete(int? id)
         {
             if (string.IsNullOrEmpty(Session["Login"] as string))
@@ -125,15 +127,15 @@ namespace Catalogue.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Models.Catalogue catalogue = db.Catalogues.Find(id);
-            if (catalogue == null)
+            CatalogueItem catalogueItem = db.CatalogueItems.Find(id);
+            if (catalogueItem == null)
             {
                 return HttpNotFound();
             }
-            return View(catalogue);
+            return View(catalogueItem);
         }
 
-        // POST: Catalogues/Delete/5
+        // POST: CatalogueItems/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
@@ -141,8 +143,8 @@ namespace Catalogue.Controllers
             if (string.IsNullOrEmpty(Session["Login"] as string))
                 return RedirectToAction("Index", "Login");
 
-            Models.Catalogue catalogue = db.Catalogues.Find(id);
-            db.Catalogues.Remove(catalogue);
+            CatalogueItem catalogueItem = db.CatalogueItems.Find(id);
+            db.CatalogueItems.Remove(catalogueItem);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
@@ -154,6 +156,16 @@ namespace Catalogue.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public ActionResult CataItemCreate(int cataID)
+        {
+            if (string.IsNullOrEmpty(Session["Login"] as string))
+                return RedirectToAction("Index", "Login");
+
+            Session["CataID"] = cataID;
+
+            return RedirectToAction("Create");
         }
     }
 }

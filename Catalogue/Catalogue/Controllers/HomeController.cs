@@ -15,8 +15,15 @@ namespace Catalogue.Controllers
 
             ViewBag.Username = Session["Login"];
 
-            return View();
+            Models.CatalogueDBEntities db = new Models.CatalogueDBEntities();
 
+            foreach(Models.User user in db.Users)
+            {
+                if (string.Compare(user.UserName,Session["Login"].ToString()) == 0)
+                    return View(user.Catalogues);
+            }
+
+            return View();
         }
 
         public ActionResult About()

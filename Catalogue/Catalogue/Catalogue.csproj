@@ -128,6 +128,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\CatalogueItemsController.cs" />
     <Compile Include="Controllers\CataloguesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
@@ -224,6 +225,11 @@
     <Content Include="Views\Catalogues\Details.cshtml" />
     <Content Include="Views\Catalogues\Edit.cshtml" />
     <Content Include="Views\Catalogues\Index.cshtml" />
+    <Content Include="Views\CatalogueItems\Create.cshtml" />
+    <Content Include="Views\CatalogueItems\Delete.cshtml" />
+    <Content Include="Views\CatalogueItems\Details.cshtml" />
+    <Content Include="Views\CatalogueItems\Edit.cshtml" />
+    <Content Include="Views\CatalogueItems\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
