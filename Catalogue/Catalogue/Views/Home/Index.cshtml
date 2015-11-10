@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<Catalogue.Models.Catalogue>
+
+@{
     ViewBag.Title = "Information Catalogue";
 }
 
@@ -7,9 +9,25 @@
 <div class="col">
     <div class="col-md-4">
         <h2>Catalogues</h2>
-        @Html.ActionLink("Create Catalogue", "Create", "Catalogue")
+        @Html.ActionLink("Create Catalogue", "Create", "Catalogues")
+
+        @foreach (var item in Model)
+        {
+            <div class="table-bordered">
+                <div>@Html.DisplayFor(modelItem => item.Title) @Html.ActionLink("Create Item", "CataItemCreate","CatalogueItems", new { cataID = item.CataID }, null)</div>
+                <div>
+                @foreach (var cataItems in item.CatalogueItems)
+                {
+                    @Html.DisplayFor(cataItem => cataItems.Title)<br/>
+                }
+                </div>
+            </div>
+        }
     </div>
 </div>
+
+
+
 <div class="col">
     <div class="col-lg-4">
         <h2>Your Content Here...</h2>

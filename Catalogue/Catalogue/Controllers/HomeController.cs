@@ -10,13 +10,20 @@ namespace Catalogue.Controllers
     {
         public ActionResult Index()
         {
-            if(!string.IsNullOrEmpty(Session["Login"] as string)) {
-                ViewBag.Username = Session["Login"];
+            if (string.IsNullOrEmpty(Session["Login"] as string))
+                return RedirectToAction("Index", "Login");
 
-                return View();
+            ViewBag.Username = Session["Login"];
+
+            Models.CatalogueDBEntities db = new Models.CatalogueDBEntities();
+
+            foreach(Models.User user in db.Users)
+            {
+                if (string.Compare(user.UserName,Session["Login"].ToString()) == 0)
+                    return View(user.Catalogues);
             }
 
-            return RedirectToAction("Index", "Login");
+            return View();
         }
 
         public ActionResult About()
