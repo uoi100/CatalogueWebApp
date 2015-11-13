@@ -165,7 +165,7 @@
           </Key>
           <Property Name="UserID" Type="Int32" Nullable="false" />
           <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Password" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="1024" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Catalogues" Relationship="Self.FK_dbo_Catalogue_dbo_User_UserID" FromRole="User" ToRole="Catalogue" />
           <NavigationProperty Name="Stat" Relationship="Self.FK_dbo_Stats_dbo_User_UserID" FromRole="User" ToRole="Stats" />

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Security.Cryptography;
+using System.IO;
 
 namespace Catalogue.Controllers
 {
@@ -33,12 +35,31 @@ namespace Catalogue.Controllers
                     {
                         if(string.Compare(user.UserName.ToLower(), loginAccount.UserName.ToLower()) == 0)
                         {
-                            if(string.Compare(user.Password, loginAccount.Password) == 0)
+                            SHA512 encryption = new SHA512Managed();
+                            byte[] data = new byte[loginAccount.Password.Length];
+                            byte[] result;
+                            string temp = loginAccount.Password;
+
+                            for (int i = 0; i < loginAccount.Password.Length; i++)
+                                data[i] = (byte)loginAccount.Password[i];
+
+                            result = encryption.ComputeHash(data);
+
+                            string newString = "";
+
+                            for (int i = 0; i < result.Length; i++)
+                                newString += String.Format("{0:X2}", result[i]);
+
+                            loginAccount.Password = newString;
+
+                            if (string.Compare(user.Password, loginAccount.Password) == 0)
                             {
                                 Session["Login"] = user.UserName;
                                 Session["UserID"] = user.UserID;
                                 return RedirectToAction("Index", "Home");
                             }
+
+                            loginAccount.Password = temp;
                         }
                     }
                 }
@@ -84,9 +105,24 @@ namespace Catalogue.Controllers
                 Models.User newUser = new Models.User();
 
                 newUser.UserName = accountToCreate.UserName;
-                newUser.Password = accountToCreate.Password;
                 newUser.Email = accountToCreate.Email;
                 newUser.UserID = userAccounts.Users.Count<Models.User>() + 1;
+
+                SHA512 encryption = SHA512CryptoServiceProvider.Create();
+                byte[] data = new byte[accountToCreate.Password.Length];
+                byte[] result;
+
+                for(int i = 0; i < accountToCreate.Password.Length; i++)
+                    data[i] = (byte)accountToCreate.Password[i];
+
+                result = encryption.ComputeHash(data);
+
+                string newString = "";
+
+                for (int i = 0; i < result.Length; i++)
+                    newString += String.Format("{0:X2}", result[i]);
+
+                newUser.Password = newString;
 
                 userAccounts.Users.Add(newUser);
                 userAccounts.SaveChanges();
