@@ -14,11 +14,11 @@
         @foreach (var item in Model)
         {
             <div class="table-bordered">
-                <div>@Html.DisplayFor(modelItem => item.Title) @Html.ActionLink("Create Item", "CataItemCreate","CatalogueItems", new { cataID = item.CataID }, null)</div>
+                <div>@Html.ActionLink(" Edit", "Edit", "Catalogues", new { id = item.CataID }, null) @Html.DisplayFor(modelItem => item.Title) @Html.ActionLink("Create Item", "CataItemCreate", "CatalogueItems", new { cataID = item.CataID }, null)</div>
                 <div>
                 @foreach (var cataItems in item.CatalogueItems)
                 {
-                    @Html.DisplayFor(cataItem => cataItems.Title)<br/>
+                    <div>@Html.ActionLink(" Edit", "Edit", "CatalogueItems", new { id = cataItems.ItemID }, null) @Html.DisplayFor(cataItem => cataItems.Title)</div><br/>
                 }
                 </div>
             </div>

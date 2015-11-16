@@ -189,5 +189,17 @@ namespace Catalogue.Controllers
 
             return RedirectToAction("Create");
         }
+
+        public ActionResult CataItemEdit(int cataID, int itemID)
+        {
+
+            if (string.IsNullOrEmpty(Session["Login"] as string))
+                return RedirectToAction("Index", "Login");
+
+            Session["CataID"] = cataID;
+            Session["ItemID"] = itemID;
+
+            return RedirectToAction("Edit", "CatalogueItems", itemID);
+        }
     }
 }
