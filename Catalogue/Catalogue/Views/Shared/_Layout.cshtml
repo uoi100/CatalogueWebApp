@@ -18,13 +18,22 @@
                 </button>
                 @Html.ActionLink("Information Catalogue", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                </ul>
-            </div>
+            @{
+                if (!string.IsNullOrWhiteSpace(Session["Login"] as string))
+                {
+                    <div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                            <li>@Html.ActionLink("About", "About", "Home")</li>
+                            <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                        </ul>
+                    </div>
+
+                    <div class="navbar-right">
+                        <li>@Html.ActionLink("Log Out", "Logout", "Home")</li>
+                    </div>
+                }
+            }
         </div>
     </div>
     <div class="container body-content">

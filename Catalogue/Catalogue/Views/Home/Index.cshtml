@@ -1,5 +1,9 @@
 ﻿@model IEnumerable<Catalogue.Models.Catalogue>
 
+@{ 
+    var modelOrdered = Model.OrderByDescending(m => m.Priority);
+}
+
 @{
     ViewBag.Title = "Information Catalogue";
 }
@@ -7,18 +11,31 @@
 <h3>Welcome @ViewBag.Username!</h3>
 
 <div class="col">
-    <div class="col-md-4">
+    <div class="col-sm-4">
         <h2>Catalogues</h2>
-        @Html.ActionLink("Create Catalogue", "Create", "Catalogues")
+        <div class="btn btn-default">@Html.ActionLink("Create Catalogue", "Create", "Catalogues")</div>
 
-        @foreach (var item in Model)
+        @foreach (var item in modelOrdered)
         {
-            <div class="table-bordered">
-                <div>@Html.ActionLink(" Edit", "Edit", "Catalogues", new { id = item.CataID }, null) @Html.DisplayFor(modelItem => item.Title) @Html.ActionLink("Create Item", "CataItemCreate", "CatalogueItems", new { cataID = item.CataID }, null)</div>
-                <div>
-                @foreach (var cataItems in item.CatalogueItems)
+             
+           var cataItems = item.CatalogueItems.OrderBy(ci => ci.Deadline);
+            
+            <div class="table table-bordered">
+                <div class="table table-condensed text-center">
+                    <div class="btn btn-default navbar-left">@Html.ActionLink(" Edit", "Edit", "Catalogues", new { id = item.CataID }, null)</div>
+                    @item.Title
+                    <div class="btn btn-default navbar-right">@Html.ActionLink("Create Item", "CataItemCreate", "CatalogueItems", new { cataID = item.CataID }, null)</div><br/>
+                    Priority: @item.Priority
+                    <hr/>
+                </div>
+                
+                <div class="text-center">
+                @foreach (var cataItem in cataItems)
                 {
-                    <div>@Html.ActionLink(" Edit", "Edit", "CatalogueItems", new { id = cataItems.ItemID }, null) @Html.DisplayFor(cataItem => cataItems.Title)</div><br/>
+                    <div><div class="btn btn-default navbar-left">@Html.ActionLink(" Edit", "Edit", "CatalogueItems", new { id = cataItem.ItemID }, null)</div>
+                    @cataItem.Title <br/>
+                    Deadline: @cataItem.Deadline
+                    </div><hr />
                 }
                 </div>
             </div>
