@@ -38,7 +38,7 @@
                     <div>
                         @foreach (var cataItem in cataItems)
                         {
-                            <div class="btn-default tableCatalogueItem" onclick="location.href='@Url.Action(" Edit", "CatalogueItems" , new { id=cataItem.ItemID })'">
+                            <div class="btn-default tableCatalogueItem" onclick="location.href='@Url.Action("Edit", "CatalogueItems" , new { id=cataItem.ItemID })'">
                                 @cataItem.Title <br />
                                 Deadline: @cataItem.Deadline
                                 @cataItem.Description
@@ -83,7 +83,7 @@
                                     <div class="text-center collapse" id=@subCataExpand>
                                         @foreach (var cataItem in subCataItems)
                                         {
-                                            <div class="btn-default tableSubCatalogueItem" onclick="location.href='@Url.Action(" Edit", "CatalogueItems" , new { id=cataItem.ItemID })'">
+                                            <div class="btn-default tableSubCatalogueItem" onclick="location.href='@Url.Action("Edit", "CatalogueItems" , new { id=cataItem.ItemID })'">
                                                 @cataItem.Title <br />
                                                 Deadline: @cataItem.Deadline <br />
                                                 @cataItem.Description
