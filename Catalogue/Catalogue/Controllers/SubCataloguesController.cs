@@ -82,7 +82,7 @@ namespace Catalogue.Controllers
 
                 db.SubCatalogues.Add(subCatalogue);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
 
             ViewBag.CataID = new SelectList(db.Catalogues, "CataID", "Title", subCatalogue.CataID);
@@ -131,7 +131,7 @@ namespace Catalogue.Controllers
 
                 db.Entry(subCatalogue).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
             ViewBag.CataID = new SelectList(db.Catalogues, "CataID", "Title", subCatalogue.CataID);
             return View(subCatalogue);

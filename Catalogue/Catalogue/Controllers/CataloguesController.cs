@@ -79,7 +79,7 @@ namespace Catalogue.Controllers
 
                 db.Catalogues.Add(catalogue);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
             return View(catalogue);
         }
@@ -126,7 +126,7 @@ namespace Catalogue.Controllers
                 catalogue.DateModified = DateTime.Now;
                 db.Entry(catalogue).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
 
             return View(catalogue);

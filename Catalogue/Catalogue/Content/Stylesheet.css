@@ -1,4 +1,18 @@
-﻿.tableCatalogue{
+﻿.tableCatalogueWrapper{
+    min-height: 100%;
+}
+
+.tableCatalogueBody{
+    position: absolute;
+    top: 10%;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    overflow-y: scroll;
+    width: 40%
+}
+
+.tableCatalogue{
     background-color: deepskyblue;
 }
 
@@ -12,4 +26,17 @@
 
 .tableSubCatalogueItem{
     background-color: lightblue;
+}
+
+.catalogueContentWrapper{
+    min-height: 100%;
+}
+
+.catalogueContentBody{
+    position: absolute;
+    top: 10%;
+    left: 40%;
+    bottom: 0;
+    right: 0;
+    overflow-y: scroll;
 }

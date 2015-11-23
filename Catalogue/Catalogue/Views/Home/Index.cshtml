@@ -4,22 +4,15 @@
     var modelOrdered = Model.OrderByDescending(m => m.Priority);
 }
 
-@{
-    ViewBag.Title = "Information Catalogue";
-}
-
-<h3>Welcome @ViewBag.Username!</h3>
-
-<div class="col">
-    <div class="col-sm-6">
-        <h2>Catalogues</h2>
+<div class="col tableCatalogueWrapper">
+    <div class="col-sm-6 tableCatalogueBody">
         <div class="btn btn-default">@Html.ActionLink("Create Catalogue", "Create", "Catalogues")</div>
 
         @foreach (var item in modelOrdered)
         {
 
             var cataItems = item.CatalogueItems.OrderBy(ci => ci.Deadline);
-            var subCatalogues = item.SubCatalogues.OrderBy(sc => sc.Priority);
+            var subCatalogues = item.SubCatalogues.OrderByDescending(sc => sc.Priority);
 
             <div class="table table-bordered">
                 <div class="text-center btn-default tableCatalogue" onclick="location.href='@Url.Action("Edit", "Catalogues", new { id = item.CataID })'" >
@@ -28,30 +21,7 @@
                     <div class="btn btn-default navbar-left">@Html.ActionLink("Create Item", "CataItemCreate", "CatalogueItems", new { cataID = item.CataID }, null)</div>               
                     <div class="btn btn-default navbar-right">@Html.ActionLink("Create SubCatalogue", "SubcataCreate", "SubCatalogues", new { cataID = item.CataID }, null)</div>
                     <br /><br/>
-                    Priority: @item.Priority
-                </div>
-                
-                <div class="text-center">
-                    @foreach(var subCatalogue in subCatalogues) {
-                        <div class="text-center btn-default tableSubCatalogue" onclick="location.href='@Url.Action("Edit", "SubCatalogues", new { id = subCatalogue.SubCataId })'" >
-                            @subCatalogue.Title <br/>
-                            <div class="btn btn-default navbar-right">@Html.ActionLink("Create Item", "SubCataItemCreate", "CatalogueItems", new { subCataID = subCatalogue.SubCataId }, null)</div>
-                            <br/><br/>
-                            Priority: @subCatalogue.Priority
-                        </div>
-
-                        var subCataItems = subCatalogue.CatalogueItems.OrderBy(si => si.Deadline);
-
-                        <div class="text-center">
-                            @foreach (var cataItem in subCataItems)
-                            {
-                                <div class="btn-default tableSubCatalogueItem" onclick="location.href='@Url.Action("Edit", "CatalogueItems", new { id = cataItem.ItemID })'" >
-                                    @cataItem.Title <br />
-                                    Deadline: @cataItem.Deadline
-                                </div>
-                            }
-                        </div>
-                    }
+                    (Debug Purposes)  Priority: @item.Priority
                 </div>
 
                 <div class="text-center">
@@ -63,16 +33,39 @@
                         </div>
                     }
                 </div>
+
+
+
+                <div class="text-center">
+                    @foreach (var subCatalogue in subCatalogues)
+                    {
+                        <div class="text-center btn-default tableSubCatalogue" onclick="location.href='@Url.Action("Edit", "SubCatalogues", new { id = subCatalogue.SubCataId })'">
+                            @subCatalogue.Title <br />
+                            <div class="btn btn-default navbar-right">@Html.ActionLink("Create Item", "SubCataItemCreate", "CatalogueItems", new { subCataID = subCatalogue.SubCataId }, null)</div>
+                            <br /><br />
+                            (Debug Purposes) Priority: @subCatalogue.Priority
+                        </div>
+
+                        var subCataItems = subCatalogue.CatalogueItems.OrderBy(si => si.Deadline);
+
+                        <div class="text-center">
+                            @foreach (var cataItem in subCataItems)
+                            {
+                                <div class="btn-default tableSubCatalogueItem" onclick="location.href='@Url.Action("Edit", "CatalogueItems", new { id = cataItem.ItemID })'">
+                                    @cataItem.Title <br />
+                                    Deadline: @cataItem.Deadline
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
             </div>
         }
     </div>
 </div>
 
-
-
-<div class="col">
-    <div class="col-lg-4">
+<div class="col catalogueContentWrapper">
+    <div class="col-lg-4 catalogueContentBody">
         <h2>Your Content Here...</h2>
     </div>
 </div>
-<br />

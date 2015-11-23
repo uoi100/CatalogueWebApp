@@ -90,7 +90,7 @@ namespace Catalogue.Controllers
 
                 db.CatalogueItems.Add(catalogueItem);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
 
             ViewBag.CataID = new SelectList(db.Catalogues, "CataID", "Title", catalogueItem.CataID);
@@ -138,7 +138,7 @@ namespace Catalogue.Controllers
                 db.Entry(catalogueItem).State = EntityState.Modified;
 
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
             ViewBag.CataID = new SelectList(db.Catalogues, "CataID", "Title", catalogueItem.CataID);
             return View(catalogueItem);
