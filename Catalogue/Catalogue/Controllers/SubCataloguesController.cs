@@ -156,5 +156,15 @@ namespace Catalogue.Controllers
             }
             base.Dispose(disposing);
         }
+
+        public ActionResult SubCataCreate(int cataID)
+        {
+            if (string.IsNullOrEmpty(Session["Login"] as string))
+                return RedirectToAction("Index", "Login");
+
+            Session["CataID"] = cataID;
+
+            return RedirectToAction("Create");
+        }
     }
 }

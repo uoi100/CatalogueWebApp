@@ -80,7 +80,12 @@ namespace Catalogue.Controllers
             {
                 catalogueItem.DateCreated = DateTime.Now;
                 catalogueItem.DateModified = DateTime.Now;
-                catalogueItem.CataID = int.Parse(Session["CataID"].ToString());
+                
+                if(Session["CataID"] != null)
+                    catalogueItem.CataID = int.Parse(Session["CataID"].ToString());
+                if (Session["SubCataID"] != null)
+                    catalogueItem.SubCataID = int.Parse(Session["SubCataID"].ToString());
+
                 catalogueItem.ItemID = db.CatalogueItems.Count<Models.CatalogueItem>() + 1;
 
                 db.CatalogueItems.Add(catalogueItem);
@@ -186,6 +191,16 @@ namespace Catalogue.Controllers
                 return RedirectToAction("Index", "Login");
 
             Session["CataID"] = cataID;
+
+            return RedirectToAction("Create");
+        }
+
+        public ActionResult SubCataItemCreate(int subCataID)
+        {
+            if (string.IsNullOrEmpty(Session["Login"] as string))
+                return RedirectToAction("Index", "Login");
+
+            Session["SubCataID"] = subCataID;
 
             return RedirectToAction("Create");
         }

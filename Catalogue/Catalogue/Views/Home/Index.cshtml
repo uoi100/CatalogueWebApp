@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<Catalogue.Models.Catalogue>
 
-@{ 
+@{
     var modelOrdered = Model.OrderByDescending(m => m.Priority);
 }
 
@@ -11,32 +11,59 @@
 <h3>Welcome @ViewBag.Username!</h3>
 
 <div class="col">
-    <div class="col-sm-4">
+    <div class="col-sm-5">
         <h2>Catalogues</h2>
         <div class="btn btn-default">@Html.ActionLink("Create Catalogue", "Create", "Catalogues")</div>
 
         @foreach (var item in modelOrdered)
         {
-             
-           var cataItems = item.CatalogueItems.OrderBy(ci => ci.Deadline);
-            
+
+            var cataItems = item.CatalogueItems.OrderBy(ci => ci.Deadline);
+            var subCatalogues = item.SubCatalogues.OrderBy(sc => sc.Priority);
+
             <div class="table table-bordered">
                 <div class="table table-condensed text-center">
                     <div class="btn btn-default navbar-left">@Html.ActionLink(" Edit", "Edit", "Catalogues", new { id = item.CataID }, null)</div>
                     @item.Title
-                    <div class="btn btn-default navbar-right">@Html.ActionLink("Create Item", "CataItemCreate", "CatalogueItems", new { cataID = item.CataID }, null)</div><br/>
+                    <div class="btn btn-default navbar-right">@Html.ActionLink("Create Item", "CataItemCreate", "CatalogueItems", new { cataID = item.CataID }, null)</div><br />
+                    <div class="btn btn-default navbar-right">@Html.ActionLink("Create SubCatalogue", "SubcataCreate", "SubCatalogues", new { cataID = item.CataID }, null)</div><br />
                     Priority: @item.Priority
-                    <hr/>
+                    <hr />
                 </div>
                 
                 <div class="text-center">
-                @foreach (var cataItem in cataItems)
-                {
-                    <div><div class="btn btn-default navbar-left">@Html.ActionLink(" Edit", "Edit", "CatalogueItems", new { id = cataItem.ItemID }, null)</div>
-                    @cataItem.Title <br/>
-                    Deadline: @cataItem.Deadline
-                    </div><hr />
-                }
+                    @foreach(var subCatalogue in subCatalogues) {
+                        <div class="table table-condensed text-center">
+                            <div class="btn btn-default navbar-left">@Html.ActionLink("Edit","Edit","SubCatalogues", new { id = subCatalogue.SubCataId }, null)</div>
+                            @subCatalogue.Title
+                            <div class="btn btn-default navbar-right">@Html.ActionLink("Create Item", "SubCataItemCreate", "CatalogueItems", new { subCataID = subCatalogue.SubCataId }, null)</div><br />
+                            Priority: @subCatalogue.Priority
+                            <hr />
+                        </div>
+
+                        var subCataItems = subCatalogue.CatalogueItems.OrderBy(si => si.Deadline);
+
+                        <div class="text-center">
+                            @foreach (var cataItem in subCataItems)
+                            {
+                                <div>
+                                    <div class="btn btn-default navbar-left">@Html.ActionLink(" Edit", "Edit", "CatalogueItems", new { id = cataItem.ItemID }, null)</div>
+                                    @cataItem.Title <br />
+                                    Deadline: @cataItem.Deadline
+                                </div><hr />
+                            }
+                        </div>
+                    }
+                </div>
+
+                <div class="text-center">
+                    @foreach (var cataItem in cataItems){
+                        <div>
+                            <div class="btn btn-default navbar-left">@Html.ActionLink(" Edit", "Edit", "CatalogueItems", new { id = cataItem.ItemID }, null)</div>
+                            @cataItem.Title <br />
+                            Deadline: @cataItem.Deadline
+                        </div><hr />
+                    }
                 </div>
             </div>
         }
