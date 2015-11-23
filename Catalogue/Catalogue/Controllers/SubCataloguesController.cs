@@ -59,7 +59,7 @@ namespace Catalogue.Controllers
         // GET: SubCatalogues/Create
         public ActionResult Create()
         {
-            ViewBag.CataID = new SelectList(db.Catalogues, "CataID", "Title");
+            ViewBag.CataName = Session["CataName"];
             return View();
         }
 
@@ -85,7 +85,7 @@ namespace Catalogue.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            ViewBag.CataID = new SelectList(db.Catalogues, "CataID", "Title", subCatalogue.CataID);
+            ViewBag.CataID = Session["CataID"];
             return View(subCatalogue);
         }
 
@@ -178,6 +178,7 @@ namespace Catalogue.Controllers
                 return RedirectToAction("Index", "Login");
 
             Session["CataID"] = cataID;
+            Session["CataName"] = db.Catalogues.Find(cataID).Title;
 
             return RedirectToAction("Create");
         }
@@ -189,6 +190,7 @@ namespace Catalogue.Controllers
 
             Session["CataID"] = cataID;
             Session["SubCataID"] = subCataID;
+            Session["CataName"] = db.Catalogues.Find(cataID).Title;
 
             return RedirectToAction("Edit");
         }

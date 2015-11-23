@@ -23,26 +23,23 @@
                 if (!string.IsNullOrWhiteSpace(Session["Login"] as string))
                 {
                     <div class="navbar-collapse collapse">
-                        <ul class="nav navbar-nav">
-                            <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                            <li>@Html.ActionLink("About", "About", "Home")</li>
-                            <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                        </ul>
-                    </div>
-
-                    <div class="navbar-right">
-                        <li>@Html.ActionLink("Log Out", "Logout", "Home")</li>
-                    </div>
+                        <div class="navbar-right">
+                            @{
+                                <ul class="nav navbar-nav">
+                                    <li>@Html.ActionLink((string)Session["Login"], "Index", "Login")</li>
+                                    <li>@Html.ActionLink("Log Out", "Logout", "Home")</li>
+                                </ul>
+                            }
+                        </div>
+                    </div>                    
                 }
             }
         </div>
     </div>
+
+
     <div class="container body-content">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - Information Catalogue</p>
-        </footer>
     </div>
 
     @Scripts.Render("~/bundles/jquery")
