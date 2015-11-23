@@ -24,9 +24,8 @@
                 <div class="table table-condensed text-center">
                     <div class="btn btn-default navbar-left">@Html.ActionLink(" Edit", "Edit", "Catalogues", new { id = item.CataID }, null)</div>
                     @item.Title
-                    <div class="btn btn-default navbar-right">@Html.ActionLink("Create Item", "CataItemCreate", "CatalogueItems", new { cataID = item.CataID }, null)</div>
-                    <br/>
-                    <div class="btn-block">Priority: @item.Priority</div>
+                    <div class="btn btn-default navbar-right">@Html.ActionLink("Create Item", "CataItemCreate", "CatalogueItems", new { cataID = item.CataID }, null)</div><br/>
+                    Priority: @item.Priority
                     <hr/>
                 </div>
                 
