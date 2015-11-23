@@ -13,25 +13,32 @@
 
             var cataItems = item.CatalogueItems.OrderBy(ci => ci.Deadline);
             var subCatalogues = item.SubCatalogues.OrderByDescending(sc => sc.Priority);
+            var titleExpand = item.CataID + "Expand";
 
             <div class="table table-bordered">
-                <div class="text-center tableCatalogue" data-toggle="collapse" data-target="#test">
-                    <div class="tableCatalogueTitle">@item.Title</div>
-                    <br/>
-                    <ul class="nav navbar-nav">
-                        <li>@Html.ActionLink("Edit", "Edit", "Catalogues", new { id = item.CataID }, null)</li>
-                        <li>@Html.ActionLink("Create Item", "CataItemCreate", "CatalogueItems", new { cataID = item.CataID }, null)</li>
-                        <li>@Html.ActionLink("Create SubCatalogue", "SubCataCreate", "SubCatalogues", new { cataID = item.CataID }, null)</li>
-                    </ul>
-                    <br /><br />
-                    (Debug Purposes)  Priority: @item.Priority
+                <div class="text-center tableCatalogue">
+                    @{
+                        var titleTarget = item.CataID + "Title";
+
+                        <div class="tableCatalogueTitle btn-default" data-toggle="collapse" data-target=#@titleTarget>@item.Title</div>
+
+                        <ul class="nav navbar-nav collapse in" id=@titleTarget>
+                            <li>@Html.ActionLink("Edit", "Edit", "Catalogues", new { id = item.CataID }, null)</li>
+                            <li>@Html.ActionLink("Create Item", "CataItemCreate", "CatalogueItems", new { cataID = item.CataID }, null)</li>
+                            <li>@Html.ActionLink("Create SubCatalogue", "SubCataCreate", "SubCatalogues", new { cataID = item.CataID }, null)</li>
+                        </ul>
+                    }
+                    (Debug Purposes)  Priority: @item.Priority <br />
+                    @item.Description
+
+                    <div class="tableBarExpand" data-toggle="collapse" data-target=#@titleExpand>Collapse / Uncollapse</div>
                 </div>
 
-                <div class="collapse in" id="test">
+                <div class="collapse in" id=@titleExpand>
                     <div>
                         @foreach (var cataItem in cataItems)
                         {
-                            <div class="btn-default tableCatalogueItem" onclick="location.href='@Url.Action("Edit", "CatalogueItems", new { id = cataItem.ItemID })'">
+                            <div class="btn-default tableCatalogueItem" onclick="location.href='@Url.Action(" Edit", "CatalogueItems" , new { id=cataItem.ItemID })'">
                                 @cataItem.Title <br />
                                 Deadline: @cataItem.Deadline
                             </div>
@@ -41,8 +48,8 @@
                     <div class="text-center">
                         @foreach (var subCatalogue in subCatalogues)
                         {
-                            <div class="text-center btn-default tableSubCatalogue" onclick="location.href='@Url.Action("Edit", "SubCatalogues", new { id = subCatalogue.SubCataId })'">
-                                @subCatalogue.Title <br />
+                            <div class="text-center btn-default tableSubCatalogue" onclick="location.href='@Url.Action("Edit", "SubCatalogues" , new { id=subCatalogue.SubCataId })'">
+                                <div class="tableSubCatalogueTitle btn-default">@subCatalogue.Title</div>
                                 <div class="btn btn-default navbar-right">@Html.ActionLink("Create Item", "SubCataItemCreate", "CatalogueItems", new { subCataID = subCatalogue.SubCataId }, null)</div>
                                 <br /><br />
                                 (Debug Purposes) Priority: @subCatalogue.Priority
@@ -53,7 +60,7 @@
                             <div class="text-center">
                                 @foreach (var cataItem in subCataItems)
                                 {
-                                    <div class="btn-default tableSubCatalogueItem" onclick="location.href='@Url.Action("Edit", "CatalogueItems", new { id = cataItem.ItemID })'">
+                                    <div class="btn-default tableSubCatalogueItem" onclick="location.href='@Url.Action(" Edit", "CatalogueItems" , new { id=cataItem.ItemID })'">
                                         @cataItem.Title <br />
                                         Deadline: @cataItem.Deadline
                                     </div>
@@ -63,7 +70,7 @@
                     </div>
                 </div>
             </div>
-        }
+                        }
     </div>
 </div>
 

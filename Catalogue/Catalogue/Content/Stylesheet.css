@@ -26,12 +26,18 @@
     background-color: dodgerblue;
 }
 
+.tableSubCatalogueTitle{
+    background-color: aquamarine;
+    color: black;
+    font-size:18px;
+}
+
 .tableSubCatalogue{
-    background-color: lightcyan;
+    background-color: mediumaquamarine;
 }
 
 .tableSubCatalogueItem{
-    background-color: lightblue;
+    background-color: lightcyan;
 }
 
 .catalogueContentWrapper{
@@ -45,4 +51,16 @@
     bottom: 0;
     right: 0;
     overflow-y: scroll;
+}
+
+.tableBarExpand{
+    background-color: gainsboro;
+}
+
+.tableBarExpand:hover{
+    background-color: moccasin;
+}
+
+.tableBarExpand:active{
+    background-color: antiquewhite;
 }
