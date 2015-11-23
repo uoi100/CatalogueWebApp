@@ -12,24 +12,22 @@ namespace Catalogue.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Catalogue
+    public partial class SubCatalogue
     {
-        public Catalogue()
+        public SubCatalogue()
         {
             this.CatalogueItems = new HashSet<CatalogueItem>();
-            this.SubCatalogues = new HashSet<SubCatalogue>();
         }
     
-        public int CataID { get; set; }
-        public int UserID { get; set; }
+        public int SubCataId { get; set; }
+        public Nullable<int> CataID { get; set; }
         public string Title { get; set; }
         public int Priority { get; set; }
         public string Description { get; set; }
         public System.DateTime DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
     
-        public virtual User User { get; set; }
         public virtual ICollection<CatalogueItem> CatalogueItems { get; set; }
-        public virtual ICollection<SubCatalogue> SubCatalogues { get; set; }
+        public virtual Catalogue Catalogue { get; set; }
     }
 }

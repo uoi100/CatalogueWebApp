@@ -161,6 +161,9 @@
     <Compile Include="Models\Stat.cs">
       <DependentUpon>CatalogueModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SubCatalogue.cs">
+      <DependentUpon>CatalogueModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\User.cs">
       <DependentUpon>CatalogueModel.tt</DependentUpon>
     </Compile>
