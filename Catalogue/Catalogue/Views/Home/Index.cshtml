@@ -11,7 +11,7 @@
 <h3>Welcome @ViewBag.Username!</h3>
 
 <div class="col">
-    <div class="col-sm-5">
+    <div class="col-sm-6">
         <h2>Catalogues</h2>
         <div class="btn btn-default">@Html.ActionLink("Create Catalogue", "Create", "Catalogues")</div>
 
@@ -22,23 +22,22 @@
             var subCatalogues = item.SubCatalogues.OrderBy(sc => sc.Priority);
 
             <div class="table table-bordered">
-                <div class="table table-condensed text-center">
-                    <div class="btn btn-default navbar-left">@Html.ActionLink(" Edit", "Edit", "Catalogues", new { id = item.CataID }, null)</div>
+                <div class="text-center btn-default tableCatalogue" onclick="location.href='@Url.Action("Edit", "Catalogues", new { id = item.CataID })'" >
                     @item.Title
-                    <div class="btn btn-default navbar-right">@Html.ActionLink("Create Item", "CataItemCreate", "CatalogueItems", new { cataID = item.CataID }, null)</div><br />
-                    <div class="btn btn-default navbar-right">@Html.ActionLink("Create SubCatalogue", "SubcataCreate", "SubCatalogues", new { cataID = item.CataID }, null)</div><br />
+                    <br />
+                    <div class="btn btn-default navbar-left">@Html.ActionLink("Create Item", "CataItemCreate", "CatalogueItems", new { cataID = item.CataID }, null)</div>               
+                    <div class="btn btn-default navbar-right">@Html.ActionLink("Create SubCatalogue", "SubcataCreate", "SubCatalogues", new { cataID = item.CataID }, null)</div>
+                    <br /><br/>
                     Priority: @item.Priority
-                    <hr />
                 </div>
                 
                 <div class="text-center">
                     @foreach(var subCatalogue in subCatalogues) {
-                        <div class="table table-condensed text-center">
-                            <div class="btn btn-default navbar-left">@Html.ActionLink("Edit","Edit","SubCatalogues", new { id = subCatalogue.SubCataId }, null)</div>
-                            @subCatalogue.Title
-                            <div class="btn btn-default navbar-right">@Html.ActionLink("Create Item", "SubCataItemCreate", "CatalogueItems", new { subCataID = subCatalogue.SubCataId }, null)</div><br />
+                        <div class="text-center btn-default tableSubCatalogue" onclick="location.href='@Url.Action("Edit", "SubCatalogues", new { id = subCatalogue.SubCataId })'" >
+                            @subCatalogue.Title <br/>
+                            <div class="btn btn-default navbar-right">@Html.ActionLink("Create Item", "SubCataItemCreate", "CatalogueItems", new { subCataID = subCatalogue.SubCataId }, null)</div>
+                            <br/><br/>
                             Priority: @subCatalogue.Priority
-                            <hr />
                         </div>
 
                         var subCataItems = subCatalogue.CatalogueItems.OrderBy(si => si.Deadline);
@@ -46,23 +45,22 @@
                         <div class="text-center">
                             @foreach (var cataItem in subCataItems)
                             {
-                                <div>
-                                    <div class="btn btn-default navbar-left">@Html.ActionLink(" Edit", "Edit", "CatalogueItems", new { id = cataItem.ItemID }, null)</div>
+                                <div class="btn-default tableSubCatalogueItem" onclick="location.href='@Url.Action("Edit", "CatalogueItems", new { id = cataItem.ItemID })'" >
                                     @cataItem.Title <br />
                                     Deadline: @cataItem.Deadline
-                                </div><hr />
+                                </div>
                             }
                         </div>
                     }
                 </div>
 
                 <div class="text-center">
-                    @foreach (var cataItem in cataItems){
-                        <div>
-                            <div class="btn btn-default navbar-left">@Html.ActionLink(" Edit", "Edit", "CatalogueItems", new { id = cataItem.ItemID }, null)</div>
+                    @foreach (var cataItem in cataItems)
+                    {
+                        <div class="btn-default tableCatalogueItem" onclick="location.href='@Url.Action("Edit", "CatalogueItems", new { id = cataItem.ItemID })'">
                             @cataItem.Title <br />
                             Deadline: @cataItem.Deadline
-                        </div><hr />
+                        </div>
                     }
                 </div>
             </div>

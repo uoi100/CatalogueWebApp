@@ -1,0 +1,15 @@
+﻿.tableCatalogue{
+    background-color: deepskyblue;
+}
+
+.tableCatalogueItem{
+    background-color: dodgerblue;
+}
+
+.tableSubCatalogue{
+    background-color: lightcyan;
+}
+
+.tableSubCatalogueItem{
+    background-color: lightblue;
+}

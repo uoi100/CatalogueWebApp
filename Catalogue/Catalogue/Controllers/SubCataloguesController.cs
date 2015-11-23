@@ -92,6 +92,9 @@ namespace Catalogue.Controllers
         // GET: SubCatalogues/Edit/5
         public ActionResult Edit(int? id)
         {
+            if (string.IsNullOrEmpty(Session["Login"] as string))
+                return RedirectToAction("Index", "Login");
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -101,7 +104,11 @@ namespace Catalogue.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.CataID = new SelectList(db.Catalogues, "CataID", "Title", subCatalogue.CataID);
+
+            Session["CataID"] = subCatalogue.CataID;
+            Session["SubCataID"] = subCatalogue.SubCataId;
+            Session["DateCreated"] = subCatalogue.DateCreated;
+
             return View(subCatalogue);
         }
 
@@ -112,8 +119,16 @@ namespace Catalogue.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "SubCataId,CataID,Title,Priority,Description,DateCreated,DateModified")] SubCatalogue subCatalogue)
         {
+            if (string.IsNullOrEmpty(Session["Login"] as string))
+                return RedirectToAction("Index", "Login");
+
             if (ModelState.IsValid)
             {
+                subCatalogue.CataID = int.Parse(Session["CataID"].ToString());
+                subCatalogue.SubCataId = int.Parse(Session["SubCataID"].ToString());
+                subCatalogue.DateCreated = DateTime.Parse(Session["DateCreated"].ToString());
+                subCatalogue.DateModified = DateTime.Now;
+
                 db.Entry(subCatalogue).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -165,6 +180,17 @@ namespace Catalogue.Controllers
             Session["CataID"] = cataID;
 
             return RedirectToAction("Create");
+        }
+
+        public ActionResult SubCataEdit(int cataID, int subCataID)
+        {
+            if (string.IsNullOrEmpty(Session["Login"] as string))
+                return RedirectToAction("Index", "Login");
+
+            Session["CataID"] = cataID;
+            Session["SubCataID"] = subCataID;
+
+            return RedirectToAction("Edit");
         }
     }
 }
