@@ -133,6 +133,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\LoginAccount.cs" />
+    <Compile Include="Controllers\SubCataloguesController.cs" />
     <Compile Include="Controllers\UserAccount.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -233,6 +234,11 @@
     <Content Include="Views\CatalogueItems\Details.cshtml" />
     <Content Include="Views\CatalogueItems\Edit.cshtml" />
     <Content Include="Views\CatalogueItems\Index.cshtml" />
+    <Content Include="Views\SubCatalogues\Create.cshtml" />
+    <Content Include="Views\SubCatalogues\Delete.cshtml" />
+    <Content Include="Views\SubCatalogues\Details.cshtml" />
+    <Content Include="Views\SubCatalogues\Edit.cshtml" />
+    <Content Include="Views\SubCatalogues\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
