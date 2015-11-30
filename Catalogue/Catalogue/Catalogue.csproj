@@ -197,6 +197,7 @@
     <Content Include="Models\CatalogueModel.edmx.diagram">
       <DependentUpon>CatalogueModel.edmx</DependentUpon>
     </Content>
+    <None Include="Properties\PublishProfiles\CST4DCatalogue.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
