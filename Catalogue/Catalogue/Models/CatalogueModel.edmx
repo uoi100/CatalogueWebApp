@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="CatalogueDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="CatalogueDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Catalogue">
           <Key>
             <PropertyRef Name="CataID" />
@@ -22,13 +22,14 @@
             <PropertyRef Name="ItemID" />
           </Key>
           <Property Name="ItemID" Type="int" Nullable="false" />
-          <Property Name="CataID" Type="int" Nullable="false" />
+          <Property Name="CataID" Type="int" />
           <Property Name="Title" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Deadline" Type="datetime" Nullable="false" />
           <Property Name="Description" Type="nvarchar" MaxLength="4000" />
           <Property Name="DateCreated" Type="datetime" Nullable="false" />
           <Property Name="DateModified" Type="datetime" />
           <Property Name="Complete" Type="bit" Nullable="false" />
+          <Property Name="SubCataID" Type="int" />
         </EntityType>
         <EntityType Name="Stats">
           <Key>
@@ -43,15 +44,39 @@
           <Property Name="FridayHrs" Type="int" />
           <Property Name="SaturdayHrs" Type="int" />
         </EntityType>
+        <EntityType Name="SubCatalogue">
+          <Key>
+            <PropertyRef Name="SubCataId" />
+          </Key>
+          <Property Name="SubCataId" Type="int" Nullable="false" />
+          <Property Name="CataID" Type="int" />
+          <Property Name="Title" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Priority" Type="int" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="4000" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+          <Property Name="DateModified" Type="datetime" />
+        </EntityType>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="UserID" />
           </Key>
           <Property Name="UserID" Type="int" Nullable="false" />
           <Property Name="UserName" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Password" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Password" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
+        <Association Name="FK__Catalogue__UserI__5AEE82B9">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Catalogue" Type="Self.Catalogue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Catalogue">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_dbo_Catalogue_dbo_User_UserID">
           <End Role="User" Type="Self.User" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -67,9 +92,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_dbo_CatalogueItem_dbo_Catalogue_CataID">
-          <End Role="Catalogue" Type="Self.Catalogue" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
+          <End Role="Catalogue" Type="Self.Catalogue" Multiplicity="0..1" />
           <End Role="CatalogueItem" Type="Self.CatalogueItem" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Catalogue">
@@ -77,6 +100,18 @@
             </Principal>
             <Dependent Role="CatalogueItem">
               <PropertyRef Name="CataID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_CatalogueItem_dbo_SubCatalogue_SubCataID">
+          <End Role="SubCatalogue" Type="Self.SubCatalogue" Multiplicity="0..1" />
+          <End Role="CatalogueItem" Type="Self.CatalogueItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SubCatalogue">
+              <PropertyRef Name="SubCataId" />
+            </Principal>
+            <Dependent Role="CatalogueItem">
+              <PropertyRef Name="SubCataID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -94,11 +129,28 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_dbo_SubCatalogue_dbo_Catalogue_CataID">
+          <End Role="Catalogue" Type="Self.Catalogue" Multiplicity="0..1" />
+          <End Role="SubCatalogue" Type="Self.SubCatalogue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Catalogue">
+              <PropertyRef Name="CataID" />
+            </Principal>
+            <Dependent Role="SubCatalogue">
+              <PropertyRef Name="CataID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="CatalogueDBModelStoreContainer">
           <EntitySet Name="Catalogue" EntityType="Self.Catalogue" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CatalogueItem" EntityType="Self.CatalogueItem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Stats" EntityType="Self.Stats" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SubCatalogue" EntityType="Self.SubCatalogue" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Catalogue__UserI__5AEE82B9" Association="Self.FK__Catalogue__UserI__5AEE82B9">
+            <End Role="User" EntitySet="User" />
+            <End Role="Catalogue" EntitySet="Catalogue" />
+          </AssociationSet>
           <AssociationSet Name="FK_dbo_Catalogue_dbo_User_UserID" Association="Self.FK_dbo_Catalogue_dbo_User_UserID">
             <End Role="User" EntitySet="User" />
             <End Role="Catalogue" EntitySet="Catalogue" />
@@ -107,13 +159,20 @@
             <End Role="Catalogue" EntitySet="Catalogue" />
             <End Role="CatalogueItem" EntitySet="CatalogueItem" />
           </AssociationSet>
+          <AssociationSet Name="FK_dbo_CatalogueItem_dbo_SubCatalogue_SubCataID" Association="Self.FK_dbo_CatalogueItem_dbo_SubCatalogue_SubCataID">
+            <End Role="SubCatalogue" EntitySet="SubCatalogue" />
+            <End Role="CatalogueItem" EntitySet="CatalogueItem" />
+          </AssociationSet>
           <AssociationSet Name="FK_dbo_Stats_dbo_User_UserID" Association="Self.FK_dbo_Stats_dbo_User_UserID">
             <End Role="User" EntitySet="User" />
             <End Role="Stats" EntitySet="Stats" />
           </AssociationSet>
+          <AssociationSet Name="FK_dbo_SubCatalogue_dbo_Catalogue_CataID" Association="Self.FK_dbo_SubCatalogue_dbo_Catalogue_CataID">
+            <End Role="Catalogue" EntitySet="Catalogue" />
+            <End Role="SubCatalogue" EntitySet="SubCatalogue" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="CatalogueDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -130,13 +189,14 @@
           <Property Name="DateModified" Type="DateTime" Precision="3" />
           <NavigationProperty Name="User" Relationship="Self.FK_dbo_Catalogue_dbo_User_UserID" FromRole="Catalogue" ToRole="User" />
           <NavigationProperty Name="CatalogueItems" Relationship="Self.FK_dbo_CatalogueItem_dbo_Catalogue_CataID" FromRole="Catalogue" ToRole="CatalogueItem" />
+          <NavigationProperty Name="SubCatalogues" Relationship="CatalogueDBModel.FK_dbo_SubCatalogue_dbo_Catalogue_CataID" FromRole="Catalogue" ToRole="SubCatalogue" />
         </EntityType>
         <EntityType Name="CatalogueItem">
           <Key>
             <PropertyRef Name="ItemID" />
           </Key>
           <Property Name="ItemID" Type="Int32" Nullable="false" />
-          <Property Name="CataID" Type="Int32" Nullable="false" />
+          <Property Name="CataID" Type="Int32" />
           <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Deadline" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Description" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
@@ -144,6 +204,8 @@
           <Property Name="DateModified" Type="DateTime" Precision="3" />
           <Property Name="Complete" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Catalogue" Relationship="Self.FK_dbo_CatalogueItem_dbo_Catalogue_CataID" FromRole="CatalogueItem" ToRole="Catalogue" />
+          <Property Name="SubCataID" Type="Int32" />
+          <NavigationProperty Name="SubCatalogue" Relationship="CatalogueDBModel.FK_dbo_CatalogueItem_dbo_SubCatalogue_SubCataID" FromRole="CatalogueItem" ToRole="SubCatalogue" />
         </EntityType>
         <EntityType Name="Stat">
           <Key>
@@ -165,7 +227,7 @@
           </Key>
           <Property Name="UserID" Type="Int32" Nullable="false" />
           <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Password" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Catalogues" Relationship="Self.FK_dbo_Catalogue_dbo_User_UserID" FromRole="User" ToRole="Catalogue" />
           <NavigationProperty Name="Stat" Relationship="Self.FK_dbo_Stats_dbo_User_UserID" FromRole="User" ToRole="Stats" />
@@ -185,7 +247,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_dbo_CatalogueItem_dbo_Catalogue_CataID">
-          <End Role="Catalogue" Type="Self.Catalogue" Multiplicity="1">
+          <End Role="Catalogue" Type="Self.Catalogue" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
           <End Role="CatalogueItem" Type="Self.CatalogueItem" Multiplicity="*" />
@@ -229,7 +291,56 @@
             <End Role="User" EntitySet="Users" />
             <End Role="Stats" EntitySet="Stats" />
           </AssociationSet>
+          <EntitySet Name="SubCatalogues" EntityType="CatalogueDBModel.SubCatalogue" />
+          <AssociationSet Name="FK_dbo_CatalogueItem_dbo_SubCatalogue_SubCataID" Association="CatalogueDBModel.FK_dbo_CatalogueItem_dbo_SubCatalogue_SubCataID">
+            <End Role="SubCatalogue" EntitySet="SubCatalogues" />
+            <End Role="CatalogueItem" EntitySet="CatalogueItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_SubCatalogue_dbo_Catalogue_CataID" Association="CatalogueDBModel.FK_dbo_SubCatalogue_dbo_Catalogue_CataID">
+            <End Role="Catalogue" EntitySet="Catalogues" />
+            <End Role="SubCatalogue" EntitySet="SubCatalogues" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="SubCatalogue">
+          <Key>
+            <PropertyRef Name="SubCataId" />
+          </Key>
+          <Property Name="SubCataId" Type="Int32" Nullable="false" />
+          <Property Name="CataID" Type="Int32" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Priority" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateModified" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="CatalogueItems" Relationship="CatalogueDBModel.FK_dbo_CatalogueItem_dbo_SubCatalogue_SubCataID" FromRole="SubCatalogue" ToRole="CatalogueItem" />
+          <NavigationProperty Name="Catalogue" Relationship="CatalogueDBModel.FK_dbo_SubCatalogue_dbo_Catalogue_CataID" FromRole="SubCatalogue" ToRole="Catalogue" />
+        </EntityType>
+        <Association Name="FK_dbo_CatalogueItem_dbo_SubCatalogue_SubCataID">
+          <End Type="CatalogueDBModel.SubCatalogue" Role="SubCatalogue" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="CatalogueDBModel.CatalogueItem" Role="CatalogueItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SubCatalogue">
+              <PropertyRef Name="SubCataId" />
+            </Principal>
+            <Dependent Role="CatalogueItem">
+              <PropertyRef Name="SubCataID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_SubCatalogue_dbo_Catalogue_CataID">
+          <End Type="CatalogueDBModel.Catalogue" Role="Catalogue" Multiplicity="0..1" />
+          <End Type="CatalogueDBModel.SubCatalogue" Role="SubCatalogue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Catalogue">
+              <PropertyRef Name="CataID" />
+            </Principal>
+            <Dependent Role="SubCatalogue">
+              <PropertyRef Name="CataID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -252,6 +363,7 @@
           <EntitySetMapping Name="CatalogueItems">
             <EntityTypeMapping TypeName="CatalogueDBModel.CatalogueItem">
               <MappingFragment StoreEntitySet="CatalogueItem">
+                <ScalarProperty Name="SubCataID" ColumnName="SubCataID" />
                 <ScalarProperty Name="ItemID" ColumnName="ItemID" />
                 <ScalarProperty Name="CataID" ColumnName="CataID" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
@@ -284,6 +396,19 @@
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SubCatalogues">
+            <EntityTypeMapping TypeName="CatalogueDBModel.SubCatalogue">
+              <MappingFragment StoreEntitySet="SubCatalogue">
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Priority" ColumnName="Priority" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="CataID" ColumnName="CataID" />
+                <ScalarProperty Name="SubCataId" ColumnName="SubCataId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

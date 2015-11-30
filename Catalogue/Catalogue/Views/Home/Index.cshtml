@@ -1,36 +1,115 @@
 ﻿@model IEnumerable<Catalogue.Models.Catalogue>
 
 @{
-    ViewBag.Title = "Information Catalogue";
+    var modelOrdered = Model.OrderByDescending(m => m.Priority);
 }
 
-<h3>Welcome @ViewBag.Username!</h3>
+<div class="col tableCatalogueWrapper">
+    <div class="col-sm-6 tableCatalogueBody">
+        <div class="btn btn-default">@Html.ActionLink("Create Catalogue", "Create", "Catalogues")</div>
 
-<div class="col">
-    <div class="col-md-4">
-        <h2>Catalogues</h2>
-        @Html.ActionLink("Create Catalogue", "Create", "Catalogues")
-
-        @foreach (var item in Model)
+        @foreach (var item in modelOrdered)
         {
-            <div class="table-bordered">
-                <div>@Html.DisplayFor(modelItem => item.Title) @Html.ActionLink("Create Item", "CataItemCreate","CatalogueItems", new { cataID = item.CataID }, null)</div>
-                <div>
-                @foreach (var cataItems in item.CatalogueItems)
-                {
-                    @Html.DisplayFor(cataItem => cataItems.Title)<br/>
-                }
+
+            var cataItems = item.CatalogueItems.OrderBy(ci => ci.Deadline);
+            var subCatalogues = item.SubCatalogues.OrderByDescending(sc => sc.Priority);
+            var titleExpand = "c" + item.CataID + "Expand";
+
+            <div class="table table-bordered">
+                <div class="text-center tableCatalogue">
+                    @{
+                        var titleTarget = "c" + item.CataID + "Title";
+
+                        <div class="tableCatalogueTitle btn-default" data-toggle="collapse" data-target=#@titleTarget>@item.Title</div>
+
+                        <ul class="nav navbar-default collapse" id=@titleTarget>
+                            <li>@Html.ActionLink("Edit", "Edit", "Catalogues", new { id = item.CataID }, null)</li>
+                            <li>@Html.ActionLink("Create Item", "CataItemCreate", "CatalogueItems", new { cataID = item.CataID }, null)</li>
+                            <li>@Html.ActionLink("Create SubCatalogue", "SubCataCreate", "SubCatalogues", new { cataID = item.CataID }, null)</li>
+                        </ul>
+                    }
+                    (Debug Purposes)  Priority: @item.Priority <br />
+                    @item.Description
+
+                    <div class="tableBarExpand" data-toggle="collapse" data-target=#@titleExpand> Collapse / Uncollapse</div>
+                </div>
+
+                <div class="collapse in" id=@titleExpand>
+                    <div>
+                        @foreach (var cataItem in cataItems)
+                        {
+                            <div class="btn-default tableCatalogueItem" onclick="location.href='@Url.Action("Edit", "CatalogueItems" , new { id=cataItem.ItemID })'">
+                                @cataItem.Title <br />
+                                Deadline: @cataItem.Deadline
+                                @cataItem.Description
+                                @{
+                                    if (cataItem.Complete)
+                                    {
+                                        <p>Complete: True</p>
+                                    }
+                                    else
+                                    {
+                                        <p>Complete: False</p>
+                                    }
+                                }
+                            </div>
+                        }
+                    </div>
+
+                    <div class="text-center">
+                        @foreach (var subCatalogue in subCatalogues)
+                        {
+                            <div>
+                                @{
+                                    var subCataTitle = "s" + subCatalogue.SubCataId + "Title";
+                                    var subCataExpand = "s" + subCatalogue.SubCataId + "Expand";
+
+                                    <div class="tableSubCatalogueTitle btn-default" data-toggle="collapse" data-target="#@subCataTitle">@subCatalogue.Title</div>
+
+                                    <ul class="nav navbar-default collapse" id=@subCataTitle>
+                                        <li>@Html.ActionLink("Edit", "Edit", "SubCatalogues", new { id = subCatalogue.SubCataId }, null)</li>
+                                        <li>@Html.ActionLink("Create Item", "SubCataItemCreate", "CatalogueItems", new { subCataID = subCatalogue.SubCataId }, null)</li>
+                                    </ul>
+                                }
+
+                                (Debug Purposes) Priority: @subCatalogue.Priority <br />
+                                @subCatalogue.Description
+
+                                <div class="tableBarExpand" data-toggle="collapse" data-target=#@subCataExpand> Collapse / Uncollapse</div>
+                            </div>
+
+                                    var subCataItems = subCatalogue.CatalogueItems.OrderBy(si => si.Deadline);
+
+                                    <div class="text-center collapse" id=@subCataExpand>
+                                        @foreach (var cataItem in subCataItems)
+                                        {
+                                            <div class="btn-default tableSubCatalogueItem" onclick="location.href='@Url.Action("Edit", "CatalogueItems" , new { id=cataItem.ItemID })'">
+                                                @cataItem.Title <br />
+                                                Deadline: @cataItem.Deadline <br />
+                                                @cataItem.Description
+                                                @{
+                                                    if (cataItem.Complete)
+                                                    {
+                                                        <p>Complete: True</p>
+                                                    }
+                                                    else
+                                                    {
+                                                        <p>Complete: False</p>
+                                                    }
+                                                }
+                                            </div>
+                                                    }
+                                    </div>
+                                                    }
+                    </div>
                 </div>
             </div>
-        }
+                                                    }
     </div>
 </div>
 
-
-
-<div class="col">
-    <div class="col-lg-4">
+<div class="col lg-12 catalogueContentWrapper">
+    <div class="col catalogueContentBody">
         <h2>Your Content Here...</h2>
     </div>
 </div>
-<br />

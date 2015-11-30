@@ -19,8 +19,12 @@ namespace Catalogue.Controllers
 
             foreach(Models.User user in db.Users)
             {
-                if (string.Compare(user.UserName,Session["Login"].ToString()) == 0)
-                    return View(user.Catalogues);
+                if (string.Compare(user.UserName, Session["Login"].ToString()) == 0) {
+                    var catalogues = user.Catalogues;
+                    catalogues.OrderBy(s => s.Priority);
+                    
+                    return View(catalogues.ToList());
+                }
             }
 
             return View();
@@ -38,6 +42,12 @@ namespace Catalogue.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+        public ActionResult Logout()
+        {
+            Session.Clear();
+            return RedirectToAction("index", "Login");
         }
     }
 }

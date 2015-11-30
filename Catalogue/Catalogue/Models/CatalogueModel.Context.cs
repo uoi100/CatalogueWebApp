@@ -12,7 +12,7 @@ namespace Catalogue.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-
+    
     public partial class CatalogueDBEntities : DbContext
     {
         public CatalogueDBEntities()
@@ -29,5 +29,6 @@ namespace Catalogue.Models
         public DbSet<CatalogueItem> CatalogueItems { get; set; }
         public DbSet<Stat> Stats { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<SubCatalogue> SubCatalogues { get; set; }
     }
 }

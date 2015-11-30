@@ -1,0 +1,66 @@
+﻿.tableCatalogueWrapper{
+    min-height: 100%;
+}
+
+.tableCatalogueBody{
+    position: absolute;
+    top: 6%;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    overflow-y: scroll;
+    width: 40%
+}
+
+.tableCatalogue{
+    background-color: deepskyblue;
+}
+
+.tableCatalogueTitle{
+    background-color: darkblue;
+    color:white;
+    font-size: 20px;
+}
+
+.tableCatalogueItem{
+    background-color: dodgerblue;
+}
+
+.tableSubCatalogueTitle{
+    background-color: aquamarine;
+    color: black;
+    font-size:18px;
+}
+
+.tableSubCatalogue{
+    background-color: mediumaquamarine;
+}
+
+.tableSubCatalogueItem{
+    background-color: lightcyan;
+}
+
+.catalogueContentWrapper{
+    min-height: 100%;
+}
+
+.catalogueContentBody{
+    position: absolute;
+    top: 6%;
+    left: 40%;
+    bottom: 0;
+    right: 0;
+    overflow-y: scroll;
+}
+
+.tableBarExpand{
+    background-color: gainsboro;
+}
+
+.tableBarExpand:hover{
+    background-color: moccasin;
+}
+
+.tableBarExpand:active{
+    background-color: antiquewhite;
+}

@@ -79,7 +79,7 @@ namespace Catalogue.Controllers
 
                 db.Catalogues.Add(catalogue);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
             return View(catalogue);
         }
@@ -126,7 +126,7 @@ namespace Catalogue.Controllers
                 catalogue.DateModified = DateTime.Now;
                 db.Entry(catalogue).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
 
             return View(catalogue);
@@ -159,9 +159,31 @@ namespace Catalogue.Controllers
                 return RedirectToAction("Index", "Login");
 
             Models.Catalogue catalogue = db.Catalogues.Find(id);
+
+            System.Collections.ArrayList removeItems = new System.Collections.ArrayList();
+            System.Collections.ArrayList removeSubCata = new System.Collections.ArrayList();
+
+
+            foreach (Models.SubCatalogue subCata in catalogue.SubCatalogues)
+            {
+                foreach (Models.CatalogueItem item in subCata.CatalogueItems)
+                    removeItems.Add(item);
+
+                removeSubCata.Add(subCata);
+            }
+
+            foreach (Models.CatalogueItem item in catalogue.CatalogueItems)
+                removeItems.Add(item);
+
+            foreach (Models.CatalogueItem item in removeItems)
+                db.CatalogueItems.Remove(item);
+
+            foreach (Models.SubCatalogue subCata in removeSubCata)
+                db.SubCatalogues.Remove(subCata);
+
             db.Catalogues.Remove(catalogue);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Home");
         }
 
         protected override void Dispose(bool disposing)

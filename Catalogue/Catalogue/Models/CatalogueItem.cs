@@ -15,14 +15,16 @@ namespace Catalogue.Models
     public partial class CatalogueItem
     {
         public int ItemID { get; set; }
-        public int CataID { get; set; }
+        public Nullable<int> CataID { get; set; }
         public string Title { get; set; }
         public System.DateTime Deadline { get; set; }
         public string Description { get; set; }
         public System.DateTime DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
         public bool Complete { get; set; }
+        public Nullable<int> SubCataID { get; set; }
     
         public virtual Catalogue Catalogue { get; set; }
+        public virtual SubCatalogue SubCatalogue { get; set; }
     }
 }

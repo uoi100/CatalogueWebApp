@@ -133,6 +133,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\LoginAccount.cs" />
+    <Compile Include="Controllers\SubCataloguesController.cs" />
     <Compile Include="Controllers\UserAccount.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -161,6 +162,9 @@
     <Compile Include="Models\Stat.cs">
       <DependentUpon>CatalogueModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SubCatalogue.cs">
+      <DependentUpon>CatalogueModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\User.cs">
       <DependentUpon>CatalogueModel.tt</DependentUpon>
     </Compile>
@@ -169,6 +173,7 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Stylesheet.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -192,6 +197,7 @@
     <Content Include="Models\CatalogueModel.edmx.diagram">
       <DependentUpon>CatalogueModel.edmx</DependentUpon>
     </Content>
+    <None Include="Properties\PublishProfiles\CST4DCatalogue.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -230,6 +236,11 @@
     <Content Include="Views\CatalogueItems\Details.cshtml" />
     <Content Include="Views\CatalogueItems\Edit.cshtml" />
     <Content Include="Views\CatalogueItems\Index.cshtml" />
+    <Content Include="Views\SubCatalogues\Create.cshtml" />
+    <Content Include="Views\SubCatalogues\Delete.cshtml" />
+    <Content Include="Views\SubCatalogues\Details.cshtml" />
+    <Content Include="Views\SubCatalogues\Edit.cshtml" />
+    <Content Include="Views\SubCatalogues\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

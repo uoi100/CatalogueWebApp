@@ -80,12 +80,17 @@ namespace Catalogue.Controllers
             {
                 catalogueItem.DateCreated = DateTime.Now;
                 catalogueItem.DateModified = DateTime.Now;
-                catalogueItem.CataID = int.Parse(Session["CataID"].ToString());
+                
+                if(Session["CataID"] != null)
+                    catalogueItem.CataID = int.Parse(Session["CataID"].ToString());
+                if (Session["SubCataID"] != null)
+                    catalogueItem.SubCataID = int.Parse(Session["SubCataID"].ToString());
+
                 catalogueItem.ItemID = db.CatalogueItems.Count<Models.CatalogueItem>() + 1;
 
                 db.CatalogueItems.Add(catalogueItem);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
 
             ViewBag.CataID = new SelectList(db.Catalogues, "CataID", "Title", catalogueItem.CataID);
@@ -111,6 +116,8 @@ namespace Catalogue.Controllers
             Session["ItemID"] = catalogueItem.ItemID;
             Session["CataID"] = catalogueItem.CataID;
             Session["DateCreated"] = catalogueItem.DateCreated;
+            ViewBag.CataID = catalogueItem.CataID;
+
             return View(catalogueItem);
         }
 
@@ -133,7 +140,7 @@ namespace Catalogue.Controllers
                 db.Entry(catalogueItem).State = EntityState.Modified;
 
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
             ViewBag.CataID = new SelectList(db.Catalogues, "CataID", "Title", catalogueItem.CataID);
             return View(catalogueItem);
@@ -168,7 +175,7 @@ namespace Catalogue.Controllers
             CatalogueItem catalogueItem = db.CatalogueItems.Find(id);
             db.CatalogueItems.Remove(catalogueItem);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Home");
         }
 
         protected override void Dispose(bool disposing)
@@ -186,8 +193,32 @@ namespace Catalogue.Controllers
                 return RedirectToAction("Index", "Login");
 
             Session["CataID"] = cataID;
+            Session["SubCataID"] = null;
 
             return RedirectToAction("Create");
+        }
+
+        public ActionResult SubCataItemCreate(int subCataID)
+        {
+            if (string.IsNullOrEmpty(Session["Login"] as string))
+                return RedirectToAction("Index", "Login");
+
+            Session["SubCataID"] = subCataID;
+            Session["CataID"] = null;
+
+            return RedirectToAction("Create");
+        }
+
+        public ActionResult CataItemEdit(int cataID, int itemID)
+        {
+
+            if (string.IsNullOrEmpty(Session["Login"] as string))
+                return RedirectToAction("Index", "Login");
+
+            Session["CataID"] = cataID;
+            Session["ItemID"] = itemID;
+
+            return RedirectToAction("Edit", "CatalogueItems", itemID);
         }
     }
 }

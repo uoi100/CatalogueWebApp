@@ -1,4 +1,4 @@
-﻿@model Catalogue.Models.CatalogueItem
+﻿@model Catalogue.Models.SubCatalogue
 
 @{
     ViewBag.Title = "Edit";
@@ -12,10 +12,10 @@
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>CatalogueItem</h4>
+        <h4>SubCatalogue</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.ItemID)
+        @Html.HiddenFor(model => model.SubCataId)
 
         <div class="form-group">
             @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -26,10 +26,10 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Deadline, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Priority, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Deadline, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Deadline, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Priority, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Priority, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -42,21 +42,10 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Complete, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.Complete)
-                    @Html.ValidationMessageFor(model => model.Complete, "", new { @class = "text-danger" })
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Save" class="btn btn-default" />
-                <div class="btn btn-default" onclick="location.href='@Url.Action("Delete", "CatalogueItems", new { id = Session["ItemID"] })'">Delete</div>
+                <div class="btn btn-default" onclick="location.href='@Url.Action("Delete", "SubCatalogues", new { id = Session["SubCataID"] })'">Delete</div>
             </div>
-
         </div>
     </div>
 }
