@@ -158,9 +158,19 @@ namespace Catalogue.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             SubCatalogue subCatalogue = db.SubCatalogues.Find(id);
+
+            System.Collections.ArrayList removeItems = new System.Collections.ArrayList();
+
+            foreach (Models.CatalogueItem item in subCatalogue.CatalogueItems)
+                removeItems.Add(item);
+
+            foreach (Models.CatalogueItem item in removeItems)
+                db.CatalogueItems.Remove(item);
+
             db.SubCatalogues.Remove(subCatalogue);
+
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Home");
         }
 
         protected override void Dispose(bool disposing)

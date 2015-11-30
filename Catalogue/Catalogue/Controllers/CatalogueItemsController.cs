@@ -116,6 +116,8 @@ namespace Catalogue.Controllers
             Session["ItemID"] = catalogueItem.ItemID;
             Session["CataID"] = catalogueItem.CataID;
             Session["DateCreated"] = catalogueItem.DateCreated;
+            ViewBag.CataID = catalogueItem.CataID;
+
             return View(catalogueItem);
         }
 
@@ -173,7 +175,7 @@ namespace Catalogue.Controllers
             CatalogueItem catalogueItem = db.CatalogueItems.Find(id);
             db.CatalogueItems.Remove(catalogueItem);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Home");
         }
 
         protected override void Dispose(bool disposing)
@@ -191,6 +193,7 @@ namespace Catalogue.Controllers
                 return RedirectToAction("Index", "Login");
 
             Session["CataID"] = cataID;
+            Session["SubCataID"] = null;
 
             return RedirectToAction("Create");
         }
@@ -201,6 +204,7 @@ namespace Catalogue.Controllers
                 return RedirectToAction("Index", "Login");
 
             Session["SubCataID"] = subCataID;
+            Session["CataID"] = null;
 
             return RedirectToAction("Create");
         }

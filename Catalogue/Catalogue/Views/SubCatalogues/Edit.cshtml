@@ -44,6 +44,7 @@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Save" class="btn btn-default" />
+                <div class="btn btn-default" onclick="location.href='@Url.Action("Delete", "SubCatalogues", new { id = Session["SubCataID"] })'">Delete</div>
             </div>
         </div>
     </div>
