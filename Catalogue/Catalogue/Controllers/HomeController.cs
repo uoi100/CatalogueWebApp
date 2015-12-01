@@ -57,7 +57,7 @@ namespace Catalogue.Controllers
 
             var catalogues = user.Catalogues;
 
-            newString += "<div class='calendarItem'>";
+            
 
             foreach (Models.Catalogue cata in catalogues)
             {
@@ -69,7 +69,8 @@ namespace Catalogue.Controllers
                         if (item.Deadline.Month == time.Month)
                             if (item.Deadline.Day == time.Day)
                             {
-                                newString += item.Title + "<br/> <br/>";
+                                newString += "<div class='calendarItem'>";
+                                newString += item.Title + "</div><br/>";
                                 foundItems = true;
                             }
                 }
@@ -86,7 +87,8 @@ namespace Catalogue.Controllers
                             if (item.Deadline.Month == time.Month)
                                 if (item.Deadline.Day == time.Day)
                                 {
-                                    newString += item.Title + "<br/> <br/>";
+                                    newString += "<div class='calendarItem'>";
+                                    newString += item.Title + "</div><br/>";
                                     foundItems = true;
                                 }
                     }
@@ -96,7 +98,7 @@ namespace Catalogue.Controllers
             }
 
             if (foundItems)
-                newString += "</div></div>";
+                newString += "</div>";
             else
                 return "";
 
