@@ -58,7 +58,8 @@ namespace Catalogue.Controllers
             var catalogues = user.Catalogues;
 
             
-
+            // Tranverse through the database to find matching items
+            // If there are then create a Calendar Item for each matching item.
             foreach (Models.Catalogue cata in catalogues)
             {
                 var catalogueItems = cata.CatalogueItems;
@@ -69,8 +70,8 @@ namespace Catalogue.Controllers
                         if (item.Deadline.Month == time.Month)
                             if (item.Deadline.Day == time.Day)
                             {
-                                newString += "<div class='calendarItem'>";
-                                newString += item.Title + "</div><br/>";
+                                newString += "<div class='calendarItem' onclick=\"location.href='" + Url.Action("Edit", "CatalogueItems" , new { id= item.ItemID}) + "'\">";
+                                  newString += item.Title + "</div><br/>";
                                 foundItems = true;
                             }
                 }
@@ -87,7 +88,7 @@ namespace Catalogue.Controllers
                             if (item.Deadline.Month == time.Month)
                                 if (item.Deadline.Day == time.Day)
                                 {
-                                    newString += "<div class='calendarItem'>";
+                                    newString += "<div class='calendarItem' onclick=\"location.href='" + Url.Action("Edit", "CatalogueItems", new { id = item.ItemID }) + "'\">";
                                     newString += item.Title + "</div><br/>";
                                     foundItems = true;
                                 }
