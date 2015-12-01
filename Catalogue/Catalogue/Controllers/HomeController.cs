@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Globalization;
 
 namespace Catalogue.Controllers
 {
@@ -22,12 +23,84 @@ namespace Catalogue.Controllers
                 if (string.Compare(user.UserName, Session["Login"].ToString()) == 0) {
                     var catalogues = user.Catalogues;
                     catalogues.OrderBy(s => s.Priority);
-                    
+
+                    int currentDay = DateTime.Today.Day;
+                    int monthDays = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+                    DateTime day = DateTime.Today;
+
+                    string calendar = "";
+
+                    for (var i = 0; i < monthDays - currentDay; i++) {
+                        DateTime date = new DateTime(day.Year, day.Month, currentDay + i);
+                        calendar += makeCalendar(date, user);
+                    }
+
+                    ViewBag.Calendar = calendar;
+
                     return View(catalogues.ToList());
                 }
             }
 
             return View();
+        }
+
+        private string makeCalendar(DateTime time, Models.User user)
+        {
+            string newString = "<div class='calendarHeader'>";
+            DateTimeFormatInfo dateFormat = CultureInfo.CurrentCulture.DateTimeFormat;
+
+            newString +=  dateFormat.GetMonthName(time.Month) + " " + time.Day + "(" + dateFormat.GetAbbreviatedDayName(time.DayOfWeek) + "), " + time.Year + "<br/>";
+
+            bool foundItems = false;
+
+            Models.CatalogueDBEntities db = new Models.CatalogueDBEntities();
+
+            var catalogues = user.Catalogues;
+
+            newString += "<div class='calendarItem'>";
+
+            foreach (Models.Catalogue cata in catalogues)
+            {
+                var catalogueItems = cata.CatalogueItems;
+
+                foreach (Models.CatalogueItem item in catalogueItems)
+                {
+                    if (item.Deadline.Year == time.Year)
+                        if (item.Deadline.Month == time.Month)
+                            if (item.Deadline.Day == time.Day)
+                            {
+                                newString += item.Title + "<br/> <br/>";
+                                foundItems = true;
+                            }
+                }
+
+                var subcatalogues = cata.SubCatalogues;
+
+                foreach(Models.SubCatalogue subCata in subcatalogues)
+                {
+                    var subCataItems = subCata.CatalogueItems;
+
+                    foreach (Models.CatalogueItem item in subCataItems)
+                    {
+                        if (item.Deadline.Year == time.Year)
+                            if (item.Deadline.Month == time.Month)
+                                if (item.Deadline.Day == time.Day)
+                                {
+                                    newString += item.Title + "<br/> <br/>";
+                                    foundItems = true;
+                                }
+                    }
+                }
+
+                
+            }
+
+            if (foundItems)
+                newString += "</div></div>";
+            else
+                return "";
+
+            return newString;
         }
 
         public ActionResult About()
