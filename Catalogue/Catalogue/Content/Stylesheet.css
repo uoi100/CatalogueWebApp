@@ -1,5 +1,10 @@
-﻿.tableCatalogueWrapper{
+﻿body{
+    background-color: #313A75;
+}
+
+.tableCatalogueWrapper{
     min-height: 100%;
+    width: 128px;
 }
 
 .tableCatalogueBody{
@@ -9,35 +14,47 @@
     bottom: 0;
     right: 0;
     overflow-y: scroll;
-    width: 40%
+    width: 40%;
+    background-color: #313A75;
+    color: white;
 }
 
 .tableCatalogue{
-    background-color: deepskyblue;
+    background-color: #182157;
+    color: white;
 }
 
 .tableCatalogueTitle{
-    background-color: darkblue;
-    color:white;
+    background-color: #182157;
+    color: #7C83AF;
     font-size: 20px;
 }
 
 .tableCatalogueItem{
-    background-color: dodgerblue;
+    background-color: #313A75;
+    color: white;
+}
+
+.tableCatalogueItem:hover{
+    background-color: black;
+    color: white;
 }
 
 .tableSubCatalogueTitle{
-    background-color: aquamarine;
-    color: black;
+    background-color: #080F3A;
+    color: #7C83AF;
     font-size:18px;
 }
 
-.tableSubCatalogue{
-    background-color: mediumaquamarine;
+.tableSubCatalogueItem{
+    background-color: #525B92;
+    color: white;
 }
 
-.tableSubCatalogueItem{
-    background-color: lightcyan;
+
+.tableSubCatalogueItem:hover{
+    background-color: black;
+    color: white;
 }
 
 .catalogueContentWrapper{
@@ -47,20 +64,62 @@
 .catalogueContentBody{
     position: absolute;
     top: 6%;
-    left: 40%;
+    left: 41%;
     bottom: 0;
     right: 0;
     overflow-y: scroll;
 }
 
+.calendarHeader{
+    float: left;
+    border: 1px solid;
+    width: 128px;
+    height: 128px;
+    overflow-y: auto;
+    font-size: 11px;
+    font-weight: bold;
+    background-color: #182157;
+    color: #7C83AF;
+}
+
+.calendarItem{
+    font-weight: normal;
+    font-size: 10px;
+    background-color: #313A75;
+}
+
 .tableBarExpand{
-    background-color: gainsboro;
+    background-color: #525B92;
 }
 
 .tableBarExpand:hover{
-    background-color: moccasin;
+    background-color: #7C83AF;
 }
 
 .tableBarExpand:active{
     background-color: antiquewhite;
+}
+
+@media screen and (max-width: 500px){
+    .tableCatalogueBody {
+        position: absolute;
+        top: 6%;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        overflow-y: scroll;
+        width: 50%;
+        color: white;
+        font-size: 10px;
+    }
+
+    .catalogueContentBody{
+        position: absolute;
+        top: 6%;
+        left: 51%;
+        bottom: 0;
+        right: 0;
+        width: 50%;
+        overflow-y: scroll;
+    }
 }
