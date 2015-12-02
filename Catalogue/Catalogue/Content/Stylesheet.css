@@ -1,8 +1,4 @@
-﻿body{
-    background-color: #313A75;
-}
-
-.tableCatalogueWrapper{
+﻿.tableCatalogueWrapper{
     min-height: 100%;
     width: 128px;
 }
@@ -68,6 +64,7 @@
     bottom: 0;
     right: 0;
     overflow-y: scroll;
+    background-color: #313A75;
 }
 
 .calendarHeader{
@@ -86,6 +83,14 @@
     font-weight: normal;
     font-size: 10px;
     background-color: #313A75;
+    color: white;
+}
+
+.calendarItem:hover{
+    font-weight: normal;
+    font-size: 10px;
+    background-color: white;
+    color: white;
 }
 
 .tableBarExpand{
